@@ -1,0 +1,75 @@
+using System;
+
+namespace Delegates
+{
+    class Program
+    {
+        //Defining a delegate
+        public delegate void AddDelegate(int x, int y);
+        public delegate string SayDelegate(string str);
+
+        public delegate void RectDelegate(double Width, double Height);
+
+
+        public void Sum(int a, int b)
+        {
+            int sum = a + b;
+            Console.WriteLine("The sum is {0}.", sum);
+        }
+
+        public static string SayHello(string name)
+        {
+            return "Hello " + name;
+        }
+        static void Main(string[] args)
+        {
+            Program p = new Program();
+            //Instantiating a delegate
+            AddDelegate ad = new AddDelegate(p.Sum); //Method is non static method and we are creating a instance of the delegate in the static block
+            //Non static member of a class can never be accessed from static block directly. We can access it only by using instance of the class
+            //Address of the method is given to the delegate because delegate holds the address or reference of the method.
+            ad(100, 500);
+            ad.Invoke(45, 89); // Can call as a method now
+            SayDelegate sd = new SayDelegate(Program.SayHello); //Static to static directly can be accessed under other static blocks within the class but outside the class need to prefixed with class name
+
+            string str = sd("Luffy");
+            string str1 = sd.Invoke("Naruto");
+            Console.WriteLine(str);
+            Console.WriteLine(str1);
+            //When we do this internally the method is going to execute not the delegate because delegate doesn't have any body
+            //Delegate is a pointer to a method.
+
+            //p.Sum(4, 8);
+            //string callName = Program.SayHello("Safal");
+            //Console.WriteLine(callName);
+
+            //Console.ReadLine();
+
+
+
+            //Multicast Delegates
+
+
+            //MulticastDelegates md = new MulticastDelegates(); //This delegate is holding the reference of two methods.
+            //md.GetArea(25.54, 25.55);
+            //md.GetPerimeter(25.54, 25.55);
+            //Console.ReadLine();
+
+            //RectDelegate rd = new RectDelegate(md.GetArea);
+            RectDelegate rd = md.GetArea; //Straight way assign without explicitly calling constructor
+            rd += md.GetPerimeter;
+
+            //double result = rd.Invoke(33.45, 67.87);
+
+            rd.Invoke(33.35, 34.65);
+            Console.WriteLine();
+            rd.Invoke(15.5,16.5);
+
+            //This is the process of performing  multicasting of method with delegate.
+
+
+            //Anonymous method in C#
+
+        }
+    }
+}
